@@ -1,0 +1,55 @@
+model:
+  backbone:
+    class_path: src.model.LDM
+    init_args:
+      max_len: 50
+      d_model: 64
+      n_head: 2
+      n_b: 4
+      dropout: 0.1
+      n_layer: 2
+      num_items: 99037
+      barope: True
+      diff_steps: 200
+      norm_weight: 0.0
+      skip_steps: 10
+      cf_weight: 1
+      n_e_sh: 1
+      n_e_sp: 2
+      n_dit_layer: 2
+  pretrain_epoch: 100
+  diffusion_epoch: 200
+
+data:
+  dataset_code: 'retail'
+  target_behavior: 'buy'
+  multi_behavior: True
+  min_uc: 3
+  num_items: 99037
+  max_len: 50
+  mask_prob: 0.2
+  num_workers: 48
+  train_batch_size: 256
+  val_batch_size: 256
+  predict_only_target: False
+
+trainer:
+  default_root_dir: logs/retail/full
+  callbacks:
+      class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args:
+        monitor: 'Val:Recall@20'
+        save_top_k: 1
+        mode: max
+  max_epochs: 300
+  devices: '[0]'
+  accelerator: cuda
+  check_val_every_n_epoch: 1
+  strategy: ddp_find_unused_parameters_true
+seed_everything: 2025
+
+optimizer:
+  class_path: torch.optim.AdamW
+  init_args:
+    lr: 0.002
+    weight_decay: 0.000001
