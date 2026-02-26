@@ -3,6 +3,7 @@
 
 </div>
 
+This is the implementation for the paper "From Agnostic to Specific: Latent Preference Diffusion for Multi-Behavior Sequential Recommendation", KDD 2026.
 The code is tested on NVIDIA V100 Platform.
 
 ## Quick Start
